@@ -4,6 +4,10 @@ import 'package:mboaquizz/pages/gastronomie_questions.dart';
 import 'package:mboaquizz/pages/geographie_questions.dart';
 import 'package:mboaquizz/pages/social_questions.dart';
 import 'package:mboaquizz/pages/traditions_questions.dart';
+import 'package:mboaquizz/pages/Parametres.dart';
+import 'package:mboaquizz/pages/Documetatin.dart';
+import 'package:mboaquizz/pages/communaute_page.dart';
+import 'package:mboaquizz/pages/profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,13 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  final List<Widget> _tabs = [
+    final List<Widget> _tabs = [
     // Accueil
     Container(),
     // Documentation
-    Center(child: Text('Documentation à venir...')),
+    const DocumentationPage(),
     // Communauté
-    Center(child: Text('Communauté à venir...')),
+    const CommunautePage(),
   ];
 
   @override
@@ -70,10 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               decoration: BoxDecoration(color: Colors.green),
             ),
+          
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Paramètres'),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context); // close drawer
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const ParametresPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profil'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfilePage()));
+              },
             ),
             ListTile(
               leading: Icon(Icons.info),

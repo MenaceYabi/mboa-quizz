@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/audio_service.dart';
+import '../services/community_service.dart';
 //import '../main.dart';
 
 class GastronomieQuestionsPage extends StatefulWidget {
@@ -35,6 +37,8 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
   List<bool> results = [];
   bool showExplanation = false;
 
+  final _audio = AudioService();
+
   void answerQuestion(int selected) {
     setState(() {
       bool isCorrect = selected == questions[currentIndex]['answer'];
@@ -51,29 +55,55 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
     });
   }
 
+  void shareResults() async {
+    final missed = <Map<String, String>>[];
+    for (int i = 0; i < questions.length; i++) {
+      if (i < results.length && !results[i]) {
+        missed.add({
+          'question': questions[i]['question'] as String,
+          'given': (questions[i]['selected'] != null) ? questions[i]['options'][questions[i]['selected']] as String : 'Aucune',
+          'correct': questions[i]['options'][questions[i]['answer']] as String,
+        });
+      }
+    }
+
+    final post = CommunityPost(
+      id: DateTime.now().toIso8601String(),
+      theme: 'Gastronomie',
+      score: score,
+      total: questions.length,
+      missed: missed,
+    );
+    await CommunityService.savePost(post);
+
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Résultats partagés dans l'onglet Communauté !")),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Image d'arrière-plan
+        // Image d'arri8re-plan (locale)
         Positioned.fill(
-          child: Image.network(
-            'https://cdn.pixabay.com/photo/2017/09/02/13/58/african-food-2705547_1280.jpg',
+          child: Image.asset(
+            'images/gastronomie.jpg',
             fit: BoxFit.cover,
-            
             // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.3),
             colorBlendMode: BlendMode.darken,
           ),
-        ),
-        Scaffold(
+  ),
+  Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             title: const Text('Quiz Gastronomie'),
-            // ignore: deprecated_member_use
-            backgroundColor: Colors.green.withOpacity(0.8),
+            backgroundColor: Colors.grey[900],
           ),
-          body: Padding(
+          body: Container(
+            color: Colors.grey[100],
             padding: const EdgeInsets.all(16.0),
             child: currentIndex < questions.length
                 ? Column(
@@ -86,7 +116,7 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
                           if (i < results.length) {
                             color = results[i] ? Colors.green : Colors.red;
                           } else {
-                            color = Colors.grey;
+                            color = Colors.grey[300]!;
                           }
                           return Expanded(
                             child: Container(
@@ -101,30 +131,40 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
                         }),
                       ),
                       const SizedBox(height: 24),
-                      Text(
-                        questions[currentIndex]['question'],
-                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                      Card(
+                        color: Colors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            questions[currentIndex]['question'],
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 24),
                       ...List.generate(questions[currentIndex]['options'].length, (i) {
+                        final isAnswer = i == questions[currentIndex]['answer'];
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: showExplanation
-                                  ? (i == questions[currentIndex]['answer']
-                                      ? Colors.green
-                                      : (i == questions[currentIndex]['selected'] ? Colors.red : Colors.white))
-                                  : Colors.white,
-                              foregroundColor: Colors.black,
+                                  ? (isAnswer ? Colors.green : (i == questions[currentIndex]['selected'] ? Colors.red : Colors.white))
+                                  : Colors.grey[800],
+                              foregroundColor: showExplanation ? Colors.white : Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: showExplanation
                                 ? null
                                 : () {
+                                    _audio.playClick();
                                     questions[currentIndex]['selected'] = i;
                                     answerQuestion(i);
                                   },
-                            child: Text(questions[currentIndex]['options'][i]),
+                            child: Text(questions[currentIndex]['options'][i], style: const TextStyle(fontSize: 16)),
                           ),
                         );
                       }),
@@ -132,7 +172,7 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
                         const SizedBox(height: 16),
                         Text(
                           questions[currentIndex]['explanation'],
-                          style: const TextStyle(color: Colors.yellow, fontSize: 16),
+                          style: const TextStyle(color: Colors.black54, fontSize: 16),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
@@ -146,14 +186,14 @@ class _GastronomieQuestionsPageState extends State<GastronomieQuestionsPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Quiz terminé !',
-                          style: const TextStyle(fontSize: 28, color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 28, color: Colors.black87, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'Score : $score / ${questions.length}',
-                          style: const TextStyle(fontSize: 22, color: Colors.white),
+                          style: const TextStyle(fontSize: 22, color: Colors.black87),
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton(

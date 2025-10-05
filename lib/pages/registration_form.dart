@@ -1,182 +1,142 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'package:mboaquizz/pages/inscription.dart';
+import 'home_screen.dart'; // Import de la page d'accueil
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key});
+  const RegistrationForm({Key? key}) : super(key: key);
 
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
-class _RegistrationFormState extends State<RegistrationForm> with SingleTickerProviderStateMixin {
+class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
   // ignore: unused_field
   String? _name;
   // ignore: unused_field
   String? _email;
-  String? _avatarUrl;
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  // ignore: unused_field2
+  String? _password;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-    _controller.forward();
-  }
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      // Utiliser les valeurs sauvegardées (évite l'avertissement de variable non utilisée)
+      debugPrint('Registration data - name: $_name, email: $_email, password: $_password');
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Connexion"),
+        backgroundColor: const Color.fromARGB(255, 107, 86, 86),
+      ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green, Colors.lightGreenAccent],
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Colors.white, Color(0xFFF5F7FA), Color(0xFFE6F0FF)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              // ignore: deprecated_member_use
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              offset: Offset(0, 6),
+            ),
+          ],
         ),
-        child: Center(
-          child: ScaleTransition(
-            scale: _animation,
-            child: SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Card(
-                elevation: 16,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-                // ignore: deprecated_member_use
-                color: Colors.white.withOpacity(0.95),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-                  child: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 48,
-                                backgroundColor: Colors.green[200],
-                                backgroundImage: _avatarUrl != null && _avatarUrl!.isNotEmpty
-                                    ? NetworkImage(_avatarUrl!)
-                                    : const NetworkImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    final url = await showDialog<String>(
-                                      context: context,
-                                      builder: (context) {
-                                        String tempUrl = '';
-                                        return AlertDialog(
-                                          title: const Text('Choisir une photo de profil'),
-                                          content: TextFormField(
-                                            decoration: const InputDecoration(hintText: 'URL de l\'image'),
-                                            onChanged: (value) => tempUrl = value,
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(context, tempUrl),
-                                              child: const Text('Valider'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    if (url != null && url.isNotEmpty) {
-                                      setState(() {
-                                        _avatarUrl = url;
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    padding: const EdgeInsets.all(8),
-                                    child: const Icon(Icons.edit, color: Colors.white, size: 20),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Nom',
-                              prefixIcon: const Icon(Icons.person, color: Colors.green),
-                              filled: true,
-                              fillColor: Colors.green[50],
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-                            ),
-                            validator: (value) => value == null || value.isEmpty ? 'Entrez votre nom' : null,
-                            onChanged: (value) => _name = value,
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              prefixIcon: const Icon(Icons.email, color: Colors.green),
-                              filled: true,
-                              fillColor: Colors.green[50],
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-                            ),
-                            validator: (value) => value == null || !value.contains('@') ? 'Entrez un email valide' : null,
-                            onChanged: (value) => _email = value,
-                          ),
-                          const SizedBox(height: 24),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeInOut,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                elevation: 8,
-                              ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'S\'inscrire',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: "Nom",
+                  labelStyle: TextStyle(color: Colors.black87),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black54),
                   ),
                 ),
+                style: const TextStyle(color: Colors.black87),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Veuillez entrer votre nom";
+                  }
+                  return null;
+                },
+                onSaved: (value) => _name = value,
               ),
-            ),
+              const SizedBox(height: 16),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  labelStyle: TextStyle(color: Colors.black87),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black54),
+                  ),
+                ),
+                style: const TextStyle(color: Colors.black87),
+                validator: (value) {
+                  if (value == null || !value.contains('@')) {
+                    return "Veuillez entrer un email valide";
+                  }
+                  return null;
+                },
+                onSaved: (value) => _email = value,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: "Mot de passe",
+                  labelStyle: TextStyle(color: Colors.black87),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black54),
+                  ),
+                ),
+                style: const TextStyle(color: Colors.black87),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.length < 6) {
+                    return "Le mot de passe doit contenir au moins 6 caractères";
+                  }
+                  return null;
+                },
+                onSaved: (value) => _password = value,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: _submitForm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[700],
+                ),
+                child: const Text("Se connecter"),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const InscriptionPage()),
+                  );
+                },
+                child: const Text(
+                  "Pas encore inscrit ? Créez un compte",
+                  style: TextStyle(color: Color.fromARGB(255, 29, 26, 26)),
+                ),
+              ),
+            ],
           ),
         ),
       ),
