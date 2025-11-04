@@ -1,0 +1,26 @@
+name: Flutter Web Deploy
+
+on:
+  push:
+    branches:
+      - main  # Chaque fois que tu pousses sur main, ça déclenche le déploiement
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'  # Remplace par ta version Flutter
+
+    - run: flutter pub get
+    - run: flutter build web
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/web
