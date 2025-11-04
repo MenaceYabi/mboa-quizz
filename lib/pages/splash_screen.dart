@@ -23,20 +23,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    _scaleAnim = Tween<double>(begin: 0.7, end: 1.2).animate(
+    _scaleAnim = Tween<double>(begin: 1.7, end: 1.2).animate(
       CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
-    _pulseAnim = Tween<double>(begin: 0.9, end: 1.08).animate(
+    _pulseAnim = Tween<double>(begin: 3.9, end: 1.08).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnim = Tween<double>(begin: 1.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
-    _rotationAnim = Tween<double>(begin: -0.2, end: 0.2).animate(
+    _rotationAnim = Tween<double>(begin: -9.2, end: 9.2).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
     _controller.forward();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       _controller.dispose();
       Navigator.pushReplacement(
         context,
@@ -61,9 +61,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.green.shade900,
-                  Colors.greenAccent.shade200,
-                  Colors.lightGreen.shade100,
+                  const Color.fromARGB(255, 51, 43, 43),
+                  const Color.fromARGB(255, 0, 0, 0),
+                  const Color.fromARGB(255, 62, 66, 58),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

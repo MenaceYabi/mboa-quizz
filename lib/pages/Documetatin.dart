@@ -3,66 +3,8 @@
 
 import 'package:flutter/material.dart';
 
-final Map<String, Map<String, dynamic>> documentationData = {
-  'Histoire': {
-    'image': 'images/Histoire.jpg',
-    'intro': 'Découvrez l\'histoire riche et variée du Cameroun, des royaumes pré-coloniaux aux mouvements d\'indépendance.',
-    'sections': [
-      {'title': 'Périodes précoloniales', 'content': 'Description des royaumes, chefferies et sociétés traditionnelles.'},
-      {'title': 'Colonisation', 'content': 'Impact des puissances coloniales et transformations sociales.'},
-      {'title': 'Indépendance', 'content': 'Le chemin vers l\'indépendance et les figures marquantes.'},
-    ],
-    'news': [
-      {'title': 'Nouvelle exposition sur l\'histoire locale', 'date': '10/10/2025'},
-      {'title': 'Restauration d\'un site historique', 'date': '02/09/2025'},
-    ],
-  },
-  'Gastronomie': {
-    'image': 'images/gastronomie.jpg',
-    'intro': 'Plongez dans les saveurs du Cameroun : recettes, ingrédients locaux et traditions culinaires des régions.',
-    'sections': [
-      {'title': 'Plats emblématiques', 'content': 'Ndolé, Achu, Koki, etc.'},
-      {'title': 'Ingrédients locaux', 'content': 'Noix de palme, igname, manioc, piments.'},
-      {'title': 'Fêtes et gastronomie', 'content': 'Recettes associées aux célébrations.'},
-    ],
-    'news': [
-      {'title': 'Festival gastronomique annuel', 'date': '05/11/2025'},
-    ],
-  },
-  'Géographie': {
-    'image': 'images/geographie.jpg',
-    'intro': 'Reliefs, climats et biodiversité du Cameroun, du littoral aux montagnes et forêts tropicales.',
-    'sections': [
-      {'title': 'Régions naturelles', 'content': 'Plaines côtières, hautes terres, forêts et savanes.'},
-      {'title': 'Ressources', 'content': 'Eau, minéraux, biodiversité.'},
-    ],
-    'news': [
-      {'title': 'Projet de conservation lancé', 'date': '20/08/2025'},
-    ],
-  },
-  'Social': {
-    'image': 'images/Social.jpg',
-    'intro': 'Aspects sociaux : langues, traditions, éducation et dynamiques urbaines.',
-    'sections': [
-      {'title': 'Sociétés et langues', 'content': 'Pluralité linguistique et culturelle.'},
-      {'title': 'Éducation', 'content': 'Systèmes scolaires et initiatives.'},
-    ],
-    'news': [
-      {'title': 'Nouvelle politique éducative', 'date': '15/07/2025'},
-    ],
-  },
-  'Traditions': {
-    'image': 'images/Traditions.jpg',
-    'intro': 'Musique, danses, artisanat et cérémonies — plongez dans les traditions vivantes du pays.',
-    'sections': [
-      {'title': 'Musique et danse', 'content': 'Instruments et danses traditionnelles.'},
-      {'title': 'Artisanat', 'content': 'Tissages, sculptures, bijoux.'},
-    ],
-    'news': [
-      {'title': 'Atelier d\'artisanat local', 'date': '01/09/2025'},
-    ],
-  },
-};
+
+
 
 class DocumentationPage extends StatelessWidget {
   const DocumentationPage({Key? key}) : super(key: key);
@@ -72,7 +14,7 @@ class DocumentationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Documentation & Actualités'),
-      ),
+      ),  
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: GridView.count(
@@ -182,3 +124,79 @@ class ThemeDocPage extends StatelessWidget {
     );
   }
 }
+
+final Map<String, dynamic> documentationData = {
+  'Gastronomie': {
+    'image': 'images/gastronomie.jpg',
+    'intro':
+        'Plongez dans les saveurs du Cameroun : recettes, ingrédients locaux et traditions culinaires des régions.',
+    'sections': [
+      {
+        'title': 'Plats emblématiques',
+        'content': 'Ndolé, Achu, Koki, eru et autres spécialités régionales.'
+      },
+      {
+        'title': 'Ingrédients locaux',
+        'content': 'Noix de palme, igname, manioc, piments et arachides.'
+      },
+      {
+        'title': 'Fêtes et gastronomie',
+        'content': 'Recettes associées aux grandes célébrations et rites traditionnels.'
+      },
+    ],
+    'news': [
+      {'title': 'Festival gastronomique annuel', 'date': '05/11/2025'},
+    ],
+  },
+
+  'Géographie': {
+    'image': 'images/geographie.jpg',
+    'intro':
+        'Reliefs, climats et biodiversité du Cameroun, du littoral aux montagnes et forêts tropicales.',
+    'sections': [
+      {
+        'title': 'Régions naturelles',
+        'content': 'Plaines côtières, hautes terres, forêts et savanes.'
+      },
+      {'title': 'Ressources', 'content': 'Eau, minéraux et biodiversité.'},
+    ],
+    'news': [
+      {'title': 'Projet de conservation lancé', 'date': '20/08/2025'},
+    ],
+  },
+
+  'Social': {
+    'image': 'images/Social.jpg',
+    'intro':
+        'Aspects sociaux : langues, traditions, éducation et dynamiques urbaines.',
+    'sections': [
+      {
+        'title': 'Sociétés et langues',
+        'content': 'Pluralité linguistique et diversité culturelle du Cameroun.'
+      },
+      {
+        'title': 'Éducation',
+        'content': 'Systèmes scolaires, initiatives communautaires et réformes.'
+      },
+    ],
+    'news': [
+      {'title': 'Nouvelle politique éducative', 'date': '15/07/2025'},
+    ],
+  },
+
+  'Traditions': {
+    'image': 'images/Traditions.jpg',
+    'intro':
+        'Musique, danses, artisanat et cérémonies — plongez dans les traditions vivantes du pays.',
+    'sections': [
+      {
+        'title': 'Musique et danse',
+        'content': 'Instruments, rythmes et danses traditionnelles.'
+      },
+      {'title': 'Artisanat', 'content': 'Tissages, sculptures et bijoux locaux.'},
+    ],
+    'news': [
+      {'title': 'Atelier d\'artisanat local', 'date': '01/09/2025'},
+    ],
+  },
+};
